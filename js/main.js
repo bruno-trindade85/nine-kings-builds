@@ -16,7 +16,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 // Imagens oficiais da wiki.gg usam frequentemente "<Carta> - <Rei>.png".
 const cardOwners={
   'Paladin':'King of Nothing','Blacksmith':'King of Nothing','Farm':'King of Nothing','Steel Coat':'King of Nothing',
-  'Wizard':'King of Spells','Library':'King of Spells','Combustion':'King of Spells','Static':'King of Spells','Adrenaline':'King of Spells',
+  'Wizard':'King of Spells','Library':'King of Spells','Combustion':'King of Spells','Static':'King of Spells','Adrenaline':'King of Time',
   'Dispenser':'King of Greed','Vault':'King of Greed','Mortgage':'King of Greed','Over-Invest':'King of Greed',
   'Bomber':'King of Blood','Raptor':'King of Blood','Cemetery':'King of Blood','Pagoda':'King of Blood','Fireworks':'King of Blood',
   'Boar':'King of Nature','Forest':'King of Nature','Elf':'King of Nature','Procreate':'King of Nature',
