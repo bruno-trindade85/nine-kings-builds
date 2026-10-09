@@ -37,3 +37,16 @@
 @media(max-width:900px){.build-table-header,.build-table-content{grid-template-columns:160px minmax(0,1fr)}.king-v2 .cards{grid-template-columns:repeat(auto-fit,minmax(135px,1fr))}.build-king-cell .king-portrait img{max-width:135px}.build-explanation{grid-template-columns:1fr}}
 @media(max-width:600px){.build-table-header{display:none}.build-table-content{grid-template-columns:1fr}.build-king-cell{border-right:0;border-bottom:1px solid var(--line);padding:12px}.build-king-cell .king-portrait img{max-height:210px;max-width:130px}.king-v2 .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.build-cards-cell{padding:9px}.king-v2 .combo-card{padding:9px}.king-v2 .art-button{width:92px;height:128px}.combo-card-description{font-size:.78rem}}
 @media(max-width:370px){.king-v2 .cards{grid-template-columns:1fr}}
+
+/* Versão 2.1 — miniaturas compactas e consistentes */
+.king-v2 .cards{grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:9px}
+.king-v2 .combo-card{padding:9px;gap:6px}
+.king-v2 .art-button{width:76px;height:96px;padding:2px}
+.build-king-cell .king-portrait img{max-width:114px;max-height:178px}
+.build-table-header,.build-table-content{grid-template-columns:160px minmax(0,1fr)}
+.combo-card-top small{font-size:.68rem}
+.combo-card-name{font-size:.8rem}
+.combo-card-description{font-size:.77rem}
+.king-portrait.image-unavailable img{display:none}
+.king-portrait.image-unavailable::before{content:'Imagem indisponível';font-size:.74rem;color:var(--muted)}
+@media(max-width:600px){.build-table-content{grid-template-columns:1fr}.build-king-cell .king-portrait img{max-width:105px;max-height:145px}.king-v2 .cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
