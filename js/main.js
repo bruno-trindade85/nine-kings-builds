@@ -45,7 +45,10 @@ const imageCandidates=name=>{
  const fullNames=[base+'.png',base+'_-_'+owner+'.png'];
  return [...new Set([
    ...fullNames.map(n=>official+encodeURIComponent(n)),
-   ...fullNames.map(n=>wiki+encodeURIComponent(n)+'/600px-'+encodeURIComponent(n))
+   ...fullNames.map(n=>wiki+encodeURIComponent(n)+'/600px-'+encodeURIComponent(n)),
+   ...(name==='Paladin'?['https://9kings.wiki.gg/images/thumb/Paladin_-_King_of_Nothing.png/600px-Paladin_-_King_of_Nothing.png?deff41']:[]),
+   ...(name==='Raptor'?['https://9kings.wiki.gg/images/Raptor.png?6b5456']:[]),
+   ...fullNames.map(n=>'https://9kings.wiki.gg/images/'+encodeURIComponent(n))
  ])];
 };
 const pageOf=name=>'https://wiki.hoodedhorse.com/9_Kings/Cards';
