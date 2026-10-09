@@ -4,3 +4,6 @@
 
 /* Vantagens permanentes não são cartas e não possuem arte de carta. */
 .perk-art{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--soft);color:var(--accent);border:1px solid var(--line);border-radius:12px;min-height:140px;font-size:.63rem;letter-spacing:.08em;font-weight:800;text-align:center;cursor:default}.perk-symbol{font-size:2.6rem;line-height:1}
+
+/* Retrato oficial exibido na seção de cada rei quando disponível */
+.king-portrait{display:flex;align-items:center;flex-direction:column;gap:8px;width:fit-content;max-width:100%;margin:20px auto 14px;padding:14px;background:var(--soft);border:1px solid var(--line);border-radius:16px}.king-portrait img{display:block;max-width:min(220px,100%);max-height:340px;width:auto;height:auto;object-fit:contain}.king-portrait figcaption{font-size:.82rem;color:var(--muted)}
