@@ -10,53 +10,28 @@ const kings=[
 {name:'Rei do Tempo',en:'King of Time',tag:'escala',color:'#86b4e9',build:'Portal + Bênçãos + Sagrado + Amplificador',desc:'Repita eventos e aproveite multiplicadores ao longo dos anos.',cards:[['Portal','Portal','Em determinado nível, faz retornar anos mantendo progresso obtido.'],['Bênção de Vida','Peacetime','Evento que aumenta significativamente a vida de terrenos escolhidos.'],['Bênção de População','Baby Boom','Evento que aumenta o número de unidades de tropas escolhidas.'],['Sagrado','Holy','Vantagem permanente que aumenta o efeito das bênçãos.'],['Amplificador','Amplifier','Recebe bônus de atributos e os transmite para terrenos adjacentes.'],['Regressão (opcional)','Regression','Permite reduzir níveis sem apagar atributos adquiridos.']],why:'O Portal possibilita revisitar eventos vantajosos mantendo melhorias anteriores; Sagrado aumenta as bênçãos. Amplificador transmite bônus de atributos, mas não copia automaticamente eventos.',place:'Prepare seus terrenos para bênçãos e programe a evolução do Portal para repetir anos favoráveis.',result:'Bênçãos repetidas',url:'https://9kings.wiki.gg/wiki/King_of_Time'}
 ];
 
-// Retratos oficiais da seleção de reis. O Rei do Tempo usa a URL fornecida pelo usuário.
-// O site usa somente imagens hospedadas na Wiki oficial da Hooded Horse.
-const officialFile=name=>'https://wiki.hoodedhorse.com/9_Kings/Special:Redirect/file/'+encodeURIComponent(name);
-const kingPortraitCandidates=king=>{
- const file=king.en.replaceAll(' ','_')+'.png';
- const links=[officialImage(file)];
- if(king.en==='King of Time')links.push(officialImage('King_of_time.png'));
- return links.filter(Boolean);
-};
+// All paths below point to downloaded files verified in assets/manifest.json.
+const kingPortraitCandidates=king=>[localAssets[king.en]].filter(Boolean);
 function portraitHtml(king){
- const urls=kingPortraitCandidates(king);
- return `<figure class="king-portrait"><img src="${esc(urls[0])}" data-portrait-images="${esc(urls.join('|'))}" alt="Retrato do ${esc(king.name)}" loading="lazy"><figcaption>${esc(king.name)}</figcaption></figure>`;
+ const src=localAssets[king.en];
+ return `<figure class="king-portrait"><img src="${esc(src||fallback(king.name))}" alt="Retrato do ${esc(king.name)}" loading="lazy"><figcaption>${esc(king.name)}</figcaption></figure>`;
 }
 function loadPortraitFallbacks(){
- document.querySelectorAll('.king-portrait img').forEach(img=>img.addEventListener('error',()=>{
-  const urls=img.dataset.portraitImages.split('|'),next=Number(img.dataset.portraitAttempt||0)+1;
-  img.dataset.portraitAttempt=String(next);
-  if(next<urls.length)img.src=urls[next];
-  else img.closest('.king-portrait').classList.add('image-unavailable');
- }));
+ document.querySelectorAll('.king-portrait img').forEach(img=>img.addEventListener('error',()=>img.closest('.king-portrait').classList.add('image-unavailable'),{once:true}));
 }
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-// Caminhos de arquivo seguem a estrutura de imagens da wiki.gg. Alguns nomes podem variar.
-// Imagens oficiais da wiki.gg usam frequentemente "<Carta> - <Rei>.png".
-// Caminhos diretos da wiki.hoodedhorse.com (padrão MediaWiki MD5).
-// Os subdiretórios são derivados do nome do arquivo; disponibilidade individual depende da Wiki.
-const officialPaths={"Paladin.png":"b/b2","Blacksmith.png":"b/be","Farm.png":"a/a7","Steel_Coat.png":"5/5a","Wizard.png":"c/c7","Library.png":"9/9b","Combustion.png":"a/a4","Static.png":"c/c9","Adrenaline.png":"e/e3","Dispenser.png":"a/a6","Vault.png":"c/c9","Mortgage.png":"1/10","Over-invest.png":"9/9f","Over-Invest.png":"b/b2","Bomber.png":"8/84","Raptor.png":"0/08","Cemetery.png":"7/7b","Pagoda.png":"3/39","Fireworks.png":"6/62","Boar.png":"6/6f","Forest.png":"c/c1","Elf.png":"8/89","Procreate.png":"0/07","Wallmaker.png":"a/ae","Earthworks.png":"a/a7","Trebuchet.png":"c/cf","Quarry.png":"2/28","Lab_Rat.png":"d/df","Overhaul.png":"b/bb","Reinforce.png":"2/26","Warlord.png":"c/c8","Camp.png":"9/9b","Migration.png":"9/9c","Swords.png":"9/96","Shields.png":"5/5b","Amplifier.png":"3/3c","Portal.png":"9/9d","Peacetime.png":"5/5a","Baby_Boom.png":"c/cb","Regression.png":"8/86","King_of_Nothing.png":"b/bb","King_of_Spells.png":"1/15","King_of_Greed.png":"9/98","King_of_Blood.png":"d/d4","King_of_Nature.png":"9/91","King_of_Stone.png":"a/a6","King_of_Progress.png":"2/20","King_of_Nomads.png":"1/15","King_of_Time.png":"8/8a","Concabulator.png":"9/96","Scientific.png":"3/30","Holy.png":"a/a3","King_of_time.png":"c/c2"};
-const officialImage=file=>{
- const folder=officialPaths[file];
- return folder?'https://wiki.hoodedhorse.com/images/mbhh_9k/'+folder+'/'+encodeURIComponent(file):null;
-};
-const imageCandidates=name=>{
- const file=name.replaceAll(' ','_')+'.png';
- const options=[file];
- if(name==='Over-Invest')options.push('Over-invest.png');
- return options.map(officialImage).filter(Boolean);
-};
+const imageCandidates=name=>[localAssets[name]].filter(Boolean);
 const pageOf=name=>'https://wiki.hoodedhorse.com/9_Kings/Cards';
 const fallback=(name)=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="220" viewBox="0 0 160 220"><rect width="160" height="220" rx="14" fill="#e9edf2"/><rect x="8" y="8" width="144" height="204" rx="11" fill="#f8fafc" stroke="#b8c3d2" stroke-width="2"/><text x="80" y="88" font-size="35" text-anchor="middle" fill="#607895">♜</text><text x="80" y="118" text-anchor="middle" fill="#43546c" font-size="11" font-family="Arial">Imagem não disponível</text><text x="80" y="138" text-anchor="middle" fill="#718198" font-size="10" font-family="Arial">Abra na Wiki</text></svg>`);
 const typeNames={defesa:'Defesa',dano:'Dano',escala:'Escalabilidade'};
 function cardHtml(c,k,n,i){
  const [pt,en,desc]=c;
- if(en==='Scientific'||en==='Holy'){
-  return `<div class="combo-card perk-card"><div class="combo-card-top"><span class="perk-icon" aria-hidden="true">✦</span><span class="combo-card-name">${esc(pt)}</span><small>Vantagem permanente</small></div><div class="combo-card-description">${esc(desc)}</div></div>`;
+ if(['Scientific','Holy','Peacetime','Baby Boom','Fireworks'].includes(en)){
+  const kind={Scientific:'Vantagem permanente',Holy:'Vantagem permanente',Peacetime:'Evento', 'Baby Boom':'Evento',Fireworks:'Decreto real'}[en];
+  return `<div class="combo-card perk-card"><div class="combo-card-top"><span class="perk-icon" aria-hidden="true">✦</span><span class="combo-card-name">${esc(pt)}</span><small>${esc(kind)}</small></div><div class="combo-card-description">${esc(desc)}</div></div>`;
  }
- const urls=imageCandidates(en),src=urls[0],page=pageOf(en);
+ const urls=imageCandidates(en),src=urls[0]||fallback(en),page=pageOf(en);
  return `<div class="combo-card"><div class="combo-card-top"><button class="art-button" type="button" data-img="${esc(src)}" data-page="${esc(page)}" data-title="${esc(pt)}" aria-label="Ampliar carta ${esc(pt)}"><img loading="lazy" src="${esc(src)}" data-images="${esc(urls.join('|'))}" data-fallback="${esc(fallback(en))}" alt="Carta ${esc(pt)} de Nine Kings"></button><span class="combo-card-name">${esc(pt)}</span><small>${esc(en)}</small></div><div class="combo-card-description">${esc(desc)}</div></div>`;
 }
 function render(){const q=$('search').value.toLocaleLowerCase('pt-BR').trim(),filter=$('filter').value;const visible=kings.filter(k=>(filter==='all'||filter===k.tag)&&[k.name,k.en,k.build,k.desc,k.why,k.place,...k.cards.flat()].join(' ').toLocaleLowerCase('pt-BR').includes(q));$('navigation').innerHTML=kings.map((k,i)=>`<a href="#rei-${i+1}">${esc(k.name)}</a>`).join('');$('builds').innerHTML=visible.map(k=>{const n=kings.indexOf(k)+1;return `<article class="king king-v2" id="rei-${n}">
@@ -70,7 +45,7 @@ function render(){const q=$('search').value.toLocaleLowerCase('pt-BR').trim(),fi
 </div>
 <div class="build-explanation"><div><h3>Por que esse combo funciona?</h3><div class="combo"><p>${esc(k.why)}</p>${k.cycle?'<div class="cycle"><span>1. Evoluir Muralha</span><i>→</i><span>2. Regressão</span><i>→</i><span>3. Evoluir de novo</span><i>↻</i></div>':''}</div></div>
 <div><h3>Como montar</h3><p class="placement">${esc(k.place)}</p></div></div>
-</article>`}).join('')||'<div class="none">Nenhuma build encontrada para sua pesquisa.</div>';$('summary').innerHTML=visible.map(k=>`<tr><td>${esc(k.name)}</td><td>${esc(k.build)}</td><td>${esc(k.result)}</td></tr>`).join('');loadPortraitFallbacks();document.querySelectorAll('.art-button img').forEach(img=>img.addEventListener('error',()=>{const urls=img.dataset.images.split('|');const index=Number(img.dataset.attempt||0)+1;img.dataset.attempt=String(index);if(index<urls.length){img.src=urls[index]}else{img.dataset.failed='1';img.src=img.dataset.fallback}}))}
+</article>`}).join('')||'<div class="none">Nenhuma build encontrada para sua pesquisa.</div>';$('summary').innerHTML=visible.map(k=>`<tr><td>${esc(k.name)}</td><td>${esc(k.build)}</td><td>${esc(k.result)}</td></tr>`).join('');loadPortraitFallbacks();document.querySelectorAll('.art-button img').forEach(img=>img.addEventListener('error',()=>{if(img.dataset.failed)return;const urls=img.dataset.images.split('|');const index=Number(img.dataset.attempt||0)+1;img.dataset.attempt=String(index);if(index<urls.length){img.src=urls[index]}else{img.dataset.failed='1';img.src=img.dataset.fallback}}))}
 $('search').addEventListener('input',render);$('filter').addEventListener('change',render);
 $('builds').addEventListener('click',e=>{const btn=e.target.closest('.art-button');if(!btn)return;const img=btn.querySelector('img');$('preview-title').textContent=btn.dataset.title;$('preview-img').src=img.src;$('preview-img').alt=btn.dataset.title;$('preview-wiki').href=btn.dataset.page;$('preview-direct').href=img.dataset.failed?btn.dataset.page:img.src;$('preview').showModal()});
 $('close-preview').addEventListener('click',()=>$('preview').close());$('preview').addEventListener('click',e=>{if(e.target===$('preview'))$('preview').close()});

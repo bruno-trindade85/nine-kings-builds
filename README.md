@@ -21,7 +21,7 @@ Abra `index.html` em um navegador moderno. Não há dependências, build ou serv
 ## Funcionalidades
 
 - Nove builds com descrição dos efeitos e sinergias;
-- imagens das cartas referenciadas na 9 Kings Wiki (com fallback);
+- imagens originais das cartas e reis armazenadas em `assets/cards/` e `assets/kings/`;
 - pesquisa por rei ou carta e filtro de tipo;
 - zoom das imagens e alternância de tema;
 - layout responsivo.
@@ -34,7 +34,7 @@ Site: https://bruno-trindade85.github.io/nine-kings-builds/
 
 ## Fontes e observações
 
-As imagens são carregadas por URL da wiki.gg e dependem da disponibilidade do site externo. Os nomes e efeitos podem mudar com atualizações do jogo. O guia não é afiliado aos criadores de Nine Kings.
+As imagens originais foram extraídas da Wiki oficial da Hooded Horse e são servidas localmente. A origem e a verificação de cada download estão em `assets/manifest.json`; o resumo está em `assets/REPORT.md`. Para atualizar, execute `python scripts/download_assets.py`. Os nomes e efeitos podem mudar com atualizações do jogo. O guia não é afiliado aos criadores de Nine Kings.
 
 - [9 Kings Wiki](https://9kings.wiki.gg/)
 - [Nine Kings na Steam](https://store.steampowered.com/app/2784470/9_Kings/)

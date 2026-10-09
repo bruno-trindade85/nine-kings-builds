@@ -58,3 +58,8 @@
 .king-v2 .combo-card{min-height:172px}
 .build-king-cell .king-portrait img{max-width:130px;max-height:185px;image-rendering:pixelated}
 @media(max-width:600px){.king-v2 .art-button{width:75px;height:63px}.king-v2 .art-button img{width:63px;height:49px}}
+
+/* Keep combo cards in one horizontal row, with explanations below. */
+.king-v2 .cards{display:flex;flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;align-items:stretch}
+.king-v2 .combo-card{flex:0 0 140px}
+@media(max-width:600px){.build-table-content{grid-template-columns:130px minmax(0,1fr)}.build-king-cell{border-right:1px solid var(--line);border-bottom:0}.build-king-cell .king-portrait img{max-width:100px}.king-v2 .combo-card{flex-basis:128px}}
