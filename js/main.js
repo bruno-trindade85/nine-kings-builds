@@ -14,12 +14,10 @@ const kings=[
 // O site usa somente imagens hospedadas na Wiki oficial da Hooded Horse.
 const officialFile=name=>'https://wiki.hoodedhorse.com/9_Kings/Special:Redirect/file/'+encodeURIComponent(name);
 const kingPortraitCandidates=king=>{
- const base=king.en.replaceAll(' ','_');
- const wikiImage='https://wiki.hoodedhorse.com/9_Kings/index.php?title=Special:Redirect/file/';
- const official=[base+'.png',base.toLowerCase()+'.png'].map(file=>wikiImage+encodeURIComponent(file));
- const community=[base.toLowerCase()+'.png',base+'.png'].map(file=>'https://9kings.wiki.gg/images/'+file);
- if(king.en==='King of Time')community.unshift('https://9kings.wiki.gg/images/King_of_time.png?7690ab');
- return [...new Set([...official,...community])];
+ const file=king.en.replaceAll(' ','_')+'.png';
+ const links=[officialImage(file)];
+ if(king.en==='King of Time')links.push(officialImage('King_of_time.png'));
+ return links.filter(Boolean);
 };
 function portraitHtml(king){
  const urls=kingPortraitCandidates(king);
@@ -37,19 +35,18 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Caminhos de arquivo seguem a estrutura de imagens da wiki.gg. Alguns nomes podem variar.
 // Imagens oficiais da wiki.gg usam frequentemente "<Carta> - <Rei>.png".
-const cardOwners={Paladin:'King of Nothing',Blacksmith:'King of Nothing',Farm:'King of Nothing','Steel Coat':'King of Nothing',Wizard:'King of Spells',Library:'King of Spells',Combustion:'King of Spells',Static:'King of Spells',Adrenaline:'King of Time',Dispenser:'King of Greed',Vault:'King of Greed',Mortgage:'King of Greed','Over-Invest':'King of Greed',Bomber:'King of Blood',Raptor:'King of Nomads',Cemetery:'King of Blood',Pagoda:'King of Blood',Fireworks:'King of Blood',Boar:'King of Nature',Forest:'King of Nature',Elf:'King of Nature',Procreate:'King of Nature',Wallmaker:'King of Stone',Earthworks:'King of Stone',Trebuchet:'King of Stone',Quarry:'King of Stone','Lab Rat':'King of Progress',Overhaul:'King of Progress',Reinforce:'King of Progress',Warlord:'King of Nomads',Camp:'King of Nomads',Migration:'King of Nomads',Swords:'King of Nomads',Shields:'King of Nomads',Amplifier:'King of Time',Portal:'King of Time',Peacetime:'King of Time','Baby Boom':'King of Time',Regression:'King of Time'};
+// Caminhos diretos da wiki.hoodedhorse.com (padrão MediaWiki MD5).
+// Os subdiretórios são derivados do nome do arquivo; disponibilidade individual depende da Wiki.
+const officialPaths={"Paladin.png":"b/b2","Blacksmith.png":"b/be","Farm.png":"a/a7","Steel_Coat.png":"5/5a","Wizard.png":"c/c7","Library.png":"9/9b","Combustion.png":"a/a4","Static.png":"c/c9","Adrenaline.png":"e/e3","Dispenser.png":"a/a6","Vault.png":"c/c9","Mortgage.png":"1/10","Over-invest.png":"9/9f","Over-Invest.png":"b/b2","Bomber.png":"8/84","Raptor.png":"0/08","Cemetery.png":"7/7b","Pagoda.png":"3/39","Fireworks.png":"6/62","Boar.png":"6/6f","Forest.png":"c/c1","Elf.png":"8/89","Procreate.png":"0/07","Wallmaker.png":"a/ae","Earthworks.png":"a/a7","Trebuchet.png":"c/cf","Quarry.png":"2/28","Lab_Rat.png":"d/df","Overhaul.png":"b/bb","Reinforce.png":"2/26","Warlord.png":"c/c8","Camp.png":"9/9b","Migration.png":"9/9c","Swords.png":"9/96","Shields.png":"5/5b","Amplifier.png":"3/3c","Portal.png":"9/9d","Peacetime.png":"5/5a","Baby_Boom.png":"c/cb","Regression.png":"8/86","King_of_Nothing.png":"b/bb","King_of_Spells.png":"1/15","King_of_Greed.png":"9/98","King_of_Blood.png":"d/d4","King_of_Nature.png":"9/91","King_of_Stone.png":"a/a6","King_of_Progress.png":"2/20","King_of_Nomads.png":"1/15","King_of_Time.png":"8/8a","Concabulator.png":"9/96","Scientific.png":"3/30","Holy.png":"a/a3","King_of_time.png":"c/c2"};
+const officialImage=file=>{
+ const folder=officialPaths[file];
+ return folder?'https://wiki.hoodedhorse.com/images/mbhh_9k/'+folder+'/'+encodeURIComponent(file):null;
+};
 const imageCandidates=name=>{
- const base=name.replaceAll(' ','_'),owner=(cardOwners[name]||'').replaceAll(' ','_');
- const official='https://wiki.hoodedhorse.com/9_Kings/index.php?title=Special:Redirect/file/';
- const wiki='https://9kings.wiki.gg/images/thumb/';
- const fullNames=[base+'.png',base+'_-_'+owner+'.png'];
- return [...new Set([
-   ...fullNames.map(n=>official+encodeURIComponent(n)),
-   ...fullNames.map(n=>wiki+encodeURIComponent(n)+'/600px-'+encodeURIComponent(n)),
-   ...(name==='Paladin'?['https://9kings.wiki.gg/images/thumb/Paladin_-_King_of_Nothing.png/600px-Paladin_-_King_of_Nothing.png?deff41']:[]),
-   ...(name==='Raptor'?['https://9kings.wiki.gg/images/Raptor.png?6b5456']:[]),
-   ...fullNames.map(n=>'https://9kings.wiki.gg/images/'+encodeURIComponent(n))
- ])];
+ const file=name.replaceAll(' ','_')+'.png';
+ const options=[file];
+ if(name==='Over-Invest')options.push('Over-invest.png');
+ return options.map(officialImage).filter(Boolean);
 };
 const pageOf=name=>'https://wiki.hoodedhorse.com/9_Kings/Cards';
 const fallback=(name)=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="220" viewBox="0 0 160 220"><rect width="160" height="220" rx="14" fill="#e9edf2"/><rect x="8" y="8" width="144" height="204" rx="11" fill="#f8fafc" stroke="#b8c3d2" stroke-width="2"/><text x="80" y="88" font-size="35" text-anchor="middle" fill="#607895">♜</text><text x="80" y="118" text-anchor="middle" fill="#43546c" font-size="11" font-family="Arial">Imagem não disponível</text><text x="80" y="138" text-anchor="middle" fill="#718198" font-size="10" font-family="Arial">Abra na Wiki</text></svg>`);
