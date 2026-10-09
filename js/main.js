@@ -26,19 +26,16 @@ const cardOwners={
   'Amplifier':'King of Time','Portal':'King of Time','Peacetime':'King of Time','Baby Boom':'King of Time','Holy':'King of Time',
   'Regression':'King of Stone'
 };
+// Links no formato de miniaturas da Wiki (images/thumb), sem arquivos originais em /images/<arquivo>.png.
 const confirmedImages={
- 'Paladin':'https://9kings.wiki.gg/images/thumb/Paladin_-_King_of_Nothing.png/600px-Paladin_-_King_of_Nothing.png?deff41',
- 'Raptor':'https://9kings.wiki.gg/images/Raptor.png?6b5456'
+  'Paladin':'https://9kings.wiki.gg/images/thumb/Paladin_-_King_of_Nothing.png/600px-Paladin_-_King_of_Nothing.png?deff41'
 };
 const imageCandidates=name=>{
- const base=name.replaceAll(' ','_');
- const owner=(cardOwners[name]||'').replaceAll(' ','_');
- const fileNames=[owner?`${base}_-_${owner}.png`:null,`${base}.png`,`${base}_card.png`].filter(Boolean);
- const urls=fileNames.flatMap(file=>[
-   `https://9kings.wiki.gg/images/thumb/${encodeURIComponent(file)}/600px-${encodeURIComponent(file)}`,
-   `https://9kings.wiki.gg/images/${encodeURIComponent(file)}`
- ]);
- return [...new Set([confirmedImages[name],...urls].filter(Boolean))];
+  const base=name.trim().replaceAll(' ','_');
+  const owner=(cardOwners[name]||'').replaceAll(' ','_');
+  const fileNames=[owner?`${base}_-_${owner}.png`:null,`${base}.png`,`${base}_card.png`].filter(Boolean);
+  const thumbnails=fileNames.map(file=>`https://9kings.wiki.gg/images/thumb/${encodeURIComponent(file)}/600px-${encodeURIComponent(file)}`);
+  return [...new Set([confirmedImages[name],...thumbnails].filter(Boolean))];
 };
 const pageOf=name=>'https://9kings.wiki.gg/wiki/'+encodeURIComponent(name.replaceAll(' ','_'));
 const fallback=(name)=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="220" viewBox="0 0 160 220"><rect width="160" height="220" rx="14" fill="#e9edf2"/><rect x="8" y="8" width="144" height="204" rx="11" fill="#f8fafc" stroke="#b8c3d2" stroke-width="2"/><text x="80" y="88" font-size="35" text-anchor="middle" fill="#607895">♜</text><text x="80" y="118" text-anchor="middle" fill="#43546c" font-size="11" font-family="Arial">Imagem não disponível</text><text x="80" y="138" text-anchor="middle" fill="#718198" font-size="10" font-family="Arial">Abra na Wiki</text></svg>`);
