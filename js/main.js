@@ -7,72 +7,46 @@ const kings=[
 {name:'Rei da Pedra',en:'King of Stone',tag:'defesa',color:'#bbc0c4',build:'Construtor de Muralhas + Regressão + Torres',desc:'Uma Muralha que recebe melhorias repetidas segura inimigos enquanto as torres atacam.',cards:[['Construtor de Muralhas','Wallmaker','Cria estruturas defensivas que dificultam o avanço inimigo.'],['Terraplenagem','Earthworks','Tomo que libera terrenos adjacentes e devolve cartas ao baralho. A Muralha é uma estrutura criada pelo Construtor de Muralhas, não uma carta separada.'],['Regressão','Regression','Reduz o nível da carta preservando atributos adquiridos.'],['Trabuco','Trebuchet','Torre de projéteis cuja quantidade cresce com as construções.'],['Pedreira (opcional)','Quarry','Melhora progressivamente o dano de torres e base.']],why:'Você evolui a Muralha, usa Regressão para reduzir o nível sem perder os atributos e a evolui outra vez. O ciclo acumula vida, enquanto as torres fazem o dano.',place:'Use o Construtor de Muralhas para gerar a Muralha, concentre melhorias nela e obtenha Regressão do Rei do Tempo; posicione torres para causar dano.',result:'Muralha com vida extrema',url:'https://9kings.wiki.gg/wiki/King_of_Stone',cycle:true},
 {name:'Rei do Progresso',en:'King of Progress',tag:'escala',color:'#89d9ce',build:'Ratos de Laboratório + Cientista (vantagem) + Reformulação',desc:'Faça suas unidades crescerem além dos níveis convencionais.',cards:[['Ratos de Laboratório','Lab Rat','Sobem de nível quando terrenos adjacentes evoluem; podem exceder o nível habitual.'],['Cientista','Scientific','Vantagem permanente que melhora os níveis iniciais dos Ratos.'],['Reformulação','Overhaul','Destrói um terreno e concede níveis a outros terrenos.'],['Reforço (opcional)','Reinforce','Encantamento que aumenta o dano quando um terreno evolui.']],why:'Ratos vizinhos aproveitam evoluções próximas. Reformulação ajuda a gerar novos níveis e faz o conjunto crescer ao longo dos anos.',place:'Agrupe Ratos em terrenos adjacentes e concentre melhorias na região.',result:'Níveis elevados',url:'https://9kings.wiki.gg/wiki/King_of_Progress'},
 {name:'Rei dos Nômades',en:'King of Nomads',tag:'escala',color:'#dfa77b',build:'Senhor da Guerra + 4 Acampamentos + Migração',desc:'Use movimento e construções para acumular bônus.',cards:[['Senhor da Guerra','Warlord','Base/tropa que fortalece unidades aliadas com base em seus atributos.'],['Acampamento','Camp','Concede bônus a terrenos próximos quando uma carta é colocada em terreno vazio.'],['Migração','Migration','Move uma carta para terreno vizinho vazio e aumenta seus atributos.'],['Espadas (opcional)','Swords','Adiciona dano à unidade selecionada.'],['Escudos (opcional)','Shields','Adiciona vida à unidade selecionada.']],why:'A Migração reforça a unidade e cria oportunidades para ativar efeitos dos Acampamentos. O Senhor da Guerra usa seus atributos para ajudar o exército.',place:'Tente cercar o Senhor da Guerra com Acampamentos e deixe espaços livres para movimentar.',result:'Bônus permanentes',url:'https://9kings.wiki.gg/wiki/King_of_Nomads'},
-{name:'Rei do Tempo',en:'King of Time',tag:'escala',color:'#86b4e9',kingImage:'https://9kings.wiki.gg/images/King_of_time.png?7690ab',build:'Portal + Bênçãos + Sagrado + Amplificador',desc:'Repita eventos e aproveite multiplicadores ao longo dos anos.',cards:[['Portal','Portal','Em determinado nível, faz retornar anos mantendo progresso obtido.'],['Bênção de Vida','Peacetime','Evento que aumenta significativamente a vida de terrenos escolhidos.'],['Bênção de População','Baby Boom','Evento que aumenta o número de unidades de tropas escolhidas.'],['Sagrado','Holy','Vantagem permanente que aumenta o efeito das bênçãos.'],['Amplificador','Amplifier','Recebe bônus de atributos e os transmite para terrenos adjacentes.'],['Regressão (opcional)','Regression','Permite reduzir níveis sem apagar atributos adquiridos.']],why:'O Portal possibilita revisitar eventos vantajosos mantendo melhorias anteriores; Sagrado aumenta as bênçãos. Amplificador transmite bônus de atributos, mas não copia automaticamente eventos.',place:'Prepare seus terrenos para bênçãos e programe a evolução do Portal para repetir anos favoráveis.',result:'Bênçãos repetidas',url:'https://9kings.wiki.gg/wiki/King_of_Time'}
+{name:'Rei do Tempo',en:'King of Time',tag:'escala',color:'#86b4e9',build:'Portal + Bênçãos + Sagrado + Amplificador',desc:'Repita eventos e aproveite multiplicadores ao longo dos anos.',cards:[['Portal','Portal','Em determinado nível, faz retornar anos mantendo progresso obtido.'],['Bênção de Vida','Peacetime','Evento que aumenta significativamente a vida de terrenos escolhidos.'],['Bênção de População','Baby Boom','Evento que aumenta o número de unidades de tropas escolhidas.'],['Sagrado','Holy','Vantagem permanente que aumenta o efeito das bênçãos.'],['Amplificador','Amplifier','Recebe bônus de atributos e os transmite para terrenos adjacentes.'],['Regressão (opcional)','Regression','Permite reduzir níveis sem apagar atributos adquiridos.']],why:'O Portal possibilita revisitar eventos vantajosos mantendo melhorias anteriores; Sagrado aumenta as bênçãos. Amplificador transmite bônus de atributos, mas não copia automaticamente eventos.',place:'Prepare seus terrenos para bênçãos e programe a evolução do Portal para repetir anos favoráveis.',result:'Bênçãos repetidas',url:'https://9kings.wiki.gg/wiki/King_of_Time'}
 ];
 
 // Retratos oficiais da seleção de reis. O Rei do Tempo usa a URL fornecida pelo usuário.
+// O site usa somente imagens hospedadas na Wiki oficial da Hooded Horse.
+const officialFile=name=>'https://wiki.hoodedhorse.com/9_Kings/Special:Redirect/file/'+encodeURIComponent(name);
 const kingPortraitCandidates=king=>{
- const name=king.en.toLowerCase().replaceAll(' ','_');
- const variants=[name,king.en.replaceAll(' ','_'),name.replace('king_of_','King_of_')];
- const urls=variants.map(v=>'https://9kings.wiki.gg/images/'+v+'.png');
- if(king.en==='King of Time') urls.unshift('https://9kings.wiki.gg/images/King_of_time.png?7690ab');
- return [...new Set(urls)];
+ const base=king.en.replaceAll(' ','_');
+ return [officialFile(base+'.png'),officialFile('King_'+base.replace(/^King_of_/,'')+'.png'),officialFile(base+'.webp')];
 };
 function portraitHtml(king){
- const images=kingPortraitCandidates(king);
- return `<figure class="king-portrait"><img src="${esc(images[0])}" data-portrait-images="${esc(images.join('|'))}" alt="Imagem do ${esc(king.name)} no jogo Nine Kings" loading="lazy"><figcaption>${esc(king.name)}</figcaption></figure>`;
+ const urls=kingPortraitCandidates(king);
+ return `<figure class="king-portrait"><img src="${esc(urls[0])}" data-portrait-images="${esc(urls.join('|'))}" alt="Retrato do ${esc(king.name)}" loading="lazy"><figcaption>${esc(king.name)}</figcaption></figure>`;
 }
 function loadPortraitFallbacks(){
- document.querySelectorAll('.king-portrait img').forEach(img=>{
-  img.addEventListener('error',()=>{
-   const options=img.dataset.portraitImages.split('|');
-   const next=Number(img.dataset.portraitAttempt||0)+1;
-   img.dataset.portraitAttempt=String(next);
-   if(next<options.length){img.src=options[next]}else{
-    const figure=img.closest('.king-portrait');
-    if(figure){figure.innerHTML='<figcaption>Retrato indisponível na Wiki</figcaption>';}
-   }
-  });
- });
+ document.querySelectorAll('.king-portrait img').forEach(img=>img.addEventListener('error',()=>{
+  const urls=img.dataset.portraitImages.split('|'),next=Number(img.dataset.portraitAttempt||0)+1;
+  img.dataset.portraitAttempt=String(next);
+  if(next<urls.length)img.src=urls[next];
+  else img.closest('.king-portrait').classList.add('image-unavailable');
+ }));
 }
-
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Caminhos de arquivo seguem a estrutura de imagens da wiki.gg. Alguns nomes podem variar.
 // Imagens oficiais da wiki.gg usam frequentemente "<Carta> - <Rei>.png".
-const cardOwners={
-  'Paladin':'King of Nothing','Blacksmith':'King of Nothing','Farm':'King of Nothing','Steel Coat':'King of Nothing',
-  'Wizard':'King of Spells','Library':'King of Spells','Combustion':'King of Spells','Static':'King of Spells','Adrenaline':'King of Time',
-  'Dispenser':'King of Greed','Vault':'King of Greed','Mortgage':'King of Greed','Over-Invest':'King of Greed',
-  'Bomber':'King of Blood','Raptor':'King of Blood','Cemetery':'King of Blood','Pagoda':'King of Blood','Fireworks':'King of Blood',
-  'Boar':'King of Nature','Forest':'King of Nature','Elf':'King of Nature','Procreate':'King of Nature',
-  'Wallmaker':'King of Stone','Wall':'King of Stone','Trebuchet':'King of Stone','Quarry':'King of Stone',
-  'Lab Rat':'King of Progress','Overhaul':'King of Progress','Reinforce':'King of Progress',
-  'Warlord':'King of Nomads','Camp':'King of Nomads','Migration':'King of Nomads','Swords':'King of Nomads','Shields':'King of Nomads',
-  'Amplifier':'King of Time','Portal':'King of Time','Peacetime':'King of Time','Baby Boom':'King of Time','Holy':'King of Time',
-  'Regression':'King of Time'
-};
-// Links no formato de miniaturas da Wiki (images/thumb), sem arquivos originais em /images/<arquivo>.png.
-const confirmedImages={
-  'Paladin':'https://9kings.wiki.gg/images/thumb/Paladin_-_King_of_Nothing.png/600px-Paladin_-_King_of_Nothing.png?deff41'
-};
 const imageCandidates=name=>{
-  const base=name.trim().replaceAll(' ','_');
-  const owner=(cardOwners[name]||'').replaceAll(' ','_');
-  const fileNames=[owner?`${base}_-_${owner}.png`:null,`${base}.png`,`${base}_card.png`].filter(Boolean);
-  const thumbnails=fileNames.map(file=>`https://9kings.wiki.gg/images/thumb/${encodeURIComponent(file)}/600px-${encodeURIComponent(file)}`);
-  return [...new Set([confirmedImages[name],...thumbnails].filter(Boolean))];
+ const base=name.replaceAll(' ','_');
+ return [officialFile(base+'.png'),officialFile('Card_'+base+'.png'),officialFile(base+'.webp')];
 };
-const pageOf=name=>'https://9kings.wiki.gg/wiki/'+encodeURIComponent(name.replaceAll(' ','_'));
+const pageOf=name=>'https://wiki.hoodedhorse.com/9_Kings/Cards';
 const fallback=(name)=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="220" viewBox="0 0 160 220"><rect width="160" height="220" rx="14" fill="#e9edf2"/><rect x="8" y="8" width="144" height="204" rx="11" fill="#f8fafc" stroke="#b8c3d2" stroke-width="2"/><text x="80" y="88" font-size="35" text-anchor="middle" fill="#607895">♜</text><text x="80" y="118" text-anchor="middle" fill="#43546c" font-size="11" font-family="Arial">Imagem não disponível</text><text x="80" y="138" text-anchor="middle" fill="#718198" font-size="10" font-family="Arial">Abra na Wiki</text></svg>`);
 const typeNames={defesa:'Defesa',dano:'Dano',escala:'Escalabilidade'};
 function cardHtml(c,k,n,i){
  const [pt,en,desc]=c;
  if(en==='Scientific'||en==='Holy'){
-  return `<div class="combo-card perk-card"><div class="combo-card-top"><span class="perk-icon" aria-hidden="true">✦</span><span class="combo-card-name">${esc(pt)}</span><small>Vantagem permanente</small></div><div class="combo-card-description">${esc(desc)}</div><a href="https://9kings.wiki.gg/wiki/Perks" target="_blank" rel="noopener noreferrer">Consultar na Wiki ↗</a></div>`;
+  return `<div class="combo-card perk-card"><div class="combo-card-top"><span class="perk-icon" aria-hidden="true">✦</span><span class="combo-card-name">${esc(pt)}</span><small>Vantagem permanente</small></div><div class="combo-card-description">${esc(desc)}</div></div>`;
  }
  const urls=imageCandidates(en),src=urls[0],page=pageOf(en);
- return `<div class="combo-card"><div class="combo-card-top"><button class="art-button" type="button" data-img="${esc(src)}" data-page="${esc(page)}" data-title="${esc(pt)}" aria-label="Ampliar carta ${esc(pt)}"><img loading="lazy" src="${esc(src)}" data-images="${esc(urls.join('|'))}" data-fallback="${esc(fallback(en))}" alt="Carta ${esc(pt)} de Nine Kings"></button><span class="combo-card-name">${esc(pt)}</span><small>${esc(en)}</small></div><div class="combo-card-description">${esc(desc)}</div><a href="${esc(page)}" target="_blank" rel="noopener noreferrer">Ver carta na Wiki ↗</a></div>`;
+ return `<div class="combo-card"><div class="combo-card-top"><button class="art-button" type="button" data-img="${esc(src)}" data-page="${esc(page)}" data-title="${esc(pt)}" aria-label="Ampliar carta ${esc(pt)}"><img loading="lazy" src="${esc(src)}" data-images="${esc(urls.join('|'))}" data-fallback="${esc(fallback(en))}" alt="Carta ${esc(pt)} de Nine Kings"></button><span class="combo-card-name">${esc(pt)}</span><small>${esc(en)}</small></div><div class="combo-card-description">${esc(desc)}</div></div>`;
 }
 function render(){const q=$('search').value.toLocaleLowerCase('pt-BR').trim(),filter=$('filter').value;const visible=kings.filter(k=>(filter==='all'||filter===k.tag)&&[k.name,k.en,k.build,k.desc,k.why,k.place,...k.cards.flat()].join(' ').toLocaleLowerCase('pt-BR').includes(q));$('navigation').innerHTML=kings.map((k,i)=>`<a href="#rei-${i+1}">${esc(k.name)}</a>`).join('');$('builds').innerHTML=visible.map(k=>{const n=kings.indexOf(k)+1;return `<article class="king king-v2" id="rei-${n}">
 <div class="king-heading"><div><div class="king-no">REI ${String(n).padStart(2,'0')}</div><h2>${esc(k.name)}</h2></div><span class="category">${typeNames[k.tag]}</span></div>
@@ -80,7 +54,7 @@ function render(){const q=$('search').value.toLocaleLowerCase('pt-BR').trim(),fi
 <p class="description">${esc(k.desc)}</p>
 <div class="build-table" aria-label="Rei e cartas do combo">
  <div class="build-table-header"><span>REI</span><span>CARTAS DO COMBO</span></div>
- <div class="build-table-content"><div class="build-king-cell">${portraitHtml(k)}<a href="${esc(k.url)}" target="_blank" rel="noopener noreferrer">Ver página do rei ↗</a></div>
+ <div class="build-table-content"><div class="build-king-cell">${portraitHtml(k)}</div>
  <div class="build-cards-cell"><div class="cards">${k.cards.map((c,i)=>cardHtml(c,k,n,i)).join('')}</div></div></div>
 </div>
 <div class="build-explanation"><div><h3>Por que esse combo funciona?</h3><div class="combo"><p>${esc(k.why)}</p>${k.cycle?'<div class="cycle"><span>1. Evoluir Muralha</span><i>→</i><span>2. Regressão</span><i>→</i><span>3. Evoluir de novo</span><i>↻</i></div>':''}</div></div>
