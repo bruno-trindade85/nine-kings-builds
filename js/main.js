@@ -15,7 +15,11 @@ const kings=[
 const officialFile=name=>'https://wiki.hoodedhorse.com/9_Kings/Special:Redirect/file/'+encodeURIComponent(name);
 const kingPortraitCandidates=king=>{
  const base=king.en.replaceAll(' ','_');
- return [officialFile(base+'.png'),officialFile('King_'+base.replace(/^King_of_/,'')+'.png'),officialFile(base+'.webp')];
+ const wikiImage='https://wiki.hoodedhorse.com/9_Kings/index.php?title=Special:Redirect/file/';
+ const official=[base+'.png',base.toLowerCase()+'.png'].map(file=>wikiImage+encodeURIComponent(file));
+ const community=[base.toLowerCase()+'.png',base+'.png'].map(file=>'https://9kings.wiki.gg/images/'+file);
+ if(king.en==='King of Time')community.unshift('https://9kings.wiki.gg/images/King_of_time.png?7690ab');
+ return [...new Set([...official,...community])];
 };
 function portraitHtml(king){
  const urls=kingPortraitCandidates(king);
@@ -33,9 +37,16 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Caminhos de arquivo seguem a estrutura de imagens da wiki.gg. Alguns nomes podem variar.
 // Imagens oficiais da wiki.gg usam frequentemente "<Carta> - <Rei>.png".
+const cardOwners={Paladin:'King of Nothing',Blacksmith:'King of Nothing',Farm:'King of Nothing','Steel Coat':'King of Nothing',Wizard:'King of Spells',Library:'King of Spells',Combustion:'King of Spells',Static:'King of Spells',Adrenaline:'King of Time',Dispenser:'King of Greed',Vault:'King of Greed',Mortgage:'King of Greed','Over-Invest':'King of Greed',Bomber:'King of Blood',Raptor:'King of Nomads',Cemetery:'King of Blood',Pagoda:'King of Blood',Fireworks:'King of Blood',Boar:'King of Nature',Forest:'King of Nature',Elf:'King of Nature',Procreate:'King of Nature',Wallmaker:'King of Stone',Earthworks:'King of Stone',Trebuchet:'King of Stone',Quarry:'King of Stone','Lab Rat':'King of Progress',Overhaul:'King of Progress',Reinforce:'King of Progress',Warlord:'King of Nomads',Camp:'King of Nomads',Migration:'King of Nomads',Swords:'King of Nomads',Shields:'King of Nomads',Amplifier:'King of Time',Portal:'King of Time',Peacetime:'King of Time','Baby Boom':'King of Time',Regression:'King of Time'};
 const imageCandidates=name=>{
- const base=name.replaceAll(' ','_');
- return [officialFile(base+'.png'),officialFile('Card_'+base+'.png'),officialFile(base+'.webp')];
+ const base=name.replaceAll(' ','_'),owner=(cardOwners[name]||'').replaceAll(' ','_');
+ const official='https://wiki.hoodedhorse.com/9_Kings/index.php?title=Special:Redirect/file/';
+ const wiki='https://9kings.wiki.gg/images/thumb/';
+ const fullNames=[base+'.png',base+'_-_'+owner+'.png'];
+ return [...new Set([
+   ...fullNames.map(n=>official+encodeURIComponent(n)),
+   ...fullNames.map(n=>wiki+encodeURIComponent(n)+'/600px-'+encodeURIComponent(n))
+ ])];
 };
 const pageOf=name=>'https://wiki.hoodedhorse.com/9_Kings/Cards';
 const fallback=(name)=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="220" viewBox="0 0 160 220"><rect width="160" height="220" rx="14" fill="#e9edf2"/><rect x="8" y="8" width="144" height="204" rx="11" fill="#f8fafc" stroke="#b8c3d2" stroke-width="2"/><text x="80" y="88" font-size="35" text-anchor="middle" fill="#607895">♜</text><text x="80" y="118" text-anchor="middle" fill="#43546c" font-size="11" font-family="Arial">Imagem não disponível</text><text x="80" y="138" text-anchor="middle" fill="#718198" font-size="10" font-family="Arial">Abra na Wiki</text></svg>`);
